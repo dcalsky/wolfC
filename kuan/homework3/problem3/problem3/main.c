@@ -27,7 +27,7 @@ int main(int argc, const char * argv[]) {
     for(i = 0; i < length; ++i){
         printf("%d\n", heights[i]);
         if(place == i){
-            printf("pass");
+            printf("%d\n", brother_height);
         }
     }
     return 0;
