@@ -9,32 +9,26 @@
 #include <stdio.h>
 
 int main(int argc, const char * argv[]) {
-    int heights[100], i=0, place=-1, brother, length;
-    
-    while (scanf("%d", &heights[i]) != EOF) {
+    int heights[100], i=0, place=-1, brother_height, length;
+    while (scanf("%d", &heights[i]) != EOF){
         ++i;
-    }
-    --i;
-    length = i;
-    brother = heights[i];
-    --i;
-    for (; i>=0; --i) {
-        if(heights[i] <= brother){
+    };
+    length = --i;
+    brother_height = heights[i--];
+    for (; i >= 0; --i) {
+        if(heights[i] <= brother_height){
             place = i;
             break;
         }
     }
     if(place == -1){
-        printf("%d\n", brother);
+        printf("%d\n", brother_height);
     }
-    for(i = 0; i<length; ++i){
+    for(i = 0; i < length; ++i){
+        printf("%d\n", heights[i]);
         if(place == i){
-            printf("%d\n", heights[i]);
-            printf("%d\n", brother);
-        }else{
-            printf("%d\n", heights[i]);
+            printf("pass");
         }
     }
-
     return 0;
 }
