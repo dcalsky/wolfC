@@ -11,7 +11,7 @@
 
 int main(int argc, const char * argv[]) {
     float *nums, total = 0;
-    nums = (float *)malloc(sizeof(float));
+    nums = (float *)malloc(5 * sizeof(float));
     int i = 0;
     while(scanf("%f", nums + i) != EOF){
         total += nums[i];

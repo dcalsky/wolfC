@@ -1,14 +1,6 @@
-#include<stdio.h>
-#include<string.h>
-int main()
-{
-    char *p;
-    char s[1000];
-    gets(s);
-    char sep[]=",. \();:\"‘’‘’'＇＇“”“”＂＂”?!%$1234567890";
-    p=strtok(s,sep);
-    printf("%s",p);
-    while(	p=strtok(NULL,sep))
-        printf("%s",p);
-    return 0;
+#include "stdio.h"
+
+int main(){
+    char str[2][2] = {'1', '2', '3', '4'};
+    printf("%c", str[2][1]);
 }
