@@ -18,7 +18,7 @@ typedef struct _Btree {
 /* node in tree, function to store the data */
 
 typedef struct _Node {
-    double dData;
+    double dData ;
     int iData;
     int dataType;
     char varName[1001];
