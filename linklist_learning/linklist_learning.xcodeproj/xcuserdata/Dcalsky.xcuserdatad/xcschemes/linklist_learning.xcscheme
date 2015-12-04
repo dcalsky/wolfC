@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F543307A1C06F3560025D45B"
-               BuildableName = "maolang"
-               BlueprintName = "maolang"
-               ReferencedContainer = "container:maolang.xcodeproj">
+               BlueprintIdentifier = "F58FE4C31C08226D00B31BCC"
+               BuildableName = "linklist_learning"
+               BlueprintName = "linklist_learning"
+               ReferencedContainer = "container:linklist_learning.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F543307A1C06F3560025D45B"
-            BuildableName = "maolang"
-            BlueprintName = "maolang"
-            ReferencedContainer = "container:maolang.xcodeproj">
+            BlueprintIdentifier = "F58FE4C31C08226D00B31BCC"
+            BuildableName = "linklist_learning"
+            BlueprintName = "linklist_learning"
+            ReferencedContainer = "container:linklist_learning.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F543307A1C06F3560025D45B"
-            BuildableName = "maolang"
-            BlueprintName = "maolang"
-            ReferencedContainer = "container:maolang.xcodeproj">
+            BlueprintIdentifier = "F58FE4C31C08226D00B31BCC"
+            BuildableName = "linklist_learning"
+            BlueprintName = "linklist_learning"
+            ReferencedContainer = "container:linklist_learning.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F543307A1C06F3560025D45B"
-            BuildableName = "maolang"
-            BlueprintName = "maolang"
-            ReferencedContainer = "container:maolang.xcodeproj">
+            BlueprintIdentifier = "F58FE4C31C08226D00B31BCC"
+            BuildableName = "linklist_learning"
+            BlueprintName = "linklist_learning"
+            ReferencedContainer = "container:linklist_learning.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

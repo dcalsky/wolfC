@@ -15,7 +15,7 @@ int main(int argc, const char * argv[]) {
     char str[1001];
     int i, success = -1;
     int judgeNum(char *, int , char);
-    scanf("%s", str);
+    scanf("%[^\n]", str);
     for(i = 0; i < strlen(str); ++i){
         if(judgeNum(str, i, str[i]) == 1){
             success = 1;
@@ -44,6 +44,8 @@ int judgeNum(char str[], int i, char c){
     }else if(c == 46){
         dots += 1;
         return dots == 0 && i != strlen(str) - 1 && str[i + 1] > 47 && str[i + 1] < 58;
+    }else if(c == 32){
+        return !(str[i - 1] > 47 && str[i - 1] < 58) ;
     }else{
         return 0;
     }

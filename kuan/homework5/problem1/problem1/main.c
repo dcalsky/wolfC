@@ -74,12 +74,5 @@ int main(int argc, const char * argv[]) {
         }
         printf("\n");
     }
-    /*
-    while(scanf("%c", &d) != EOF){
-        printf("%d %d\n", X, Y);
-        
-
-    }
-     */
     return 0;
 }
