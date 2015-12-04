@@ -3,8 +3,11 @@
 //
 
 #include "stdio.h"
+#include "tree.h"
 
 int main(){
-    printf("hello maolang");
+    Tree rootTree = createTree();
+    insertVar(rootTree, 3.4, 1, 1, "a");
+    //printf("%lf", findNode(rootTree, "a")->dData);
     return 0;
 }
