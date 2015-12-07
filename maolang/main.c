@@ -4,21 +4,23 @@
 
 #include "stdio.h"
 #include "tree.h"
+#include "parser.h"
 
 int main(){
     Tree rootTree = createTree();
     Node tmpNode;
-    insertVar(rootTree, 3.4, 1, 0, "ab");
-    insertVar(rootTree, 6.6, 1, 1, "ac");
-    insertVar(rootTree, 5.5, 1, 1, "aad");
-    insertVar(rootTree, 3.1, 1, 1, "ae");
-    tmpNode = findNode(rootTree, "ab");
+    char *str = {"double a = 9;"};
+    insertVar(rootTree, "ab", INT, -11);
+    insertVar(rootTree, "ac", DOUBLE, 6.6);
+    tmpNode = findNode(rootTree, "ac");
+
     if(tmpNode->dataType == 1){
-        printf("%lf\n", tmpNode->dData);
+        printf("%.6lf\n", tmpNode->data.dData);
     }else if(tmpNode->dataType == 0){
-        printf("%d\n", tmpNode->iData);
+        printf("%d\n", tmpNode->data.iData);
     }else{
         printf("null");
     }
+    parser(str);
     return 0;
 }

@@ -5,6 +5,8 @@
 #ifndef MAOLANG_TREE_H
 #define MAOLANG_TREE_H
 
+typedef enum {INT, DOUBLE, ERROR} DataType;
+
 /* Define a binary tree to store, sort, get, delete the data */
 /* find detail data based on node */
 
@@ -18,19 +20,21 @@ typedef struct _Btree {
 /* node in tree, function to store the data */
 
 typedef struct _Node {
-    double dData ;
-    int iData;
-    int dataType;
-    char varName[1001];
+    char varName[24];
+    union {
+        int iData;
+        double dData;
+    } data;
+    DataType dataType;
 } *Node;
 
 /* create a new tree to give service to us */
 
 Tree createTree();
 
-void insertVar(Tree tree, double dData, int iData, int dataType, char *varName);
+void insertVar(Tree,  char *, DataType, double);
 
-Node findNode(Tree tree, char *varName);
+Node findNode(Tree, char *);
 
 
 

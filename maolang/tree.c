@@ -2,15 +2,11 @@
 // Created by Dcalsky on 15/12/4.
 //
 #include "string.h"
-#include "stdio.h"
 #include "tree.h"
 
 
 Tree createTree(){
     Tree tree = malloc(sizeof(struct _Btree));
-//    tree->node->dData = 0.0;
-//    tree->node->iData = 0;
-//    tree->node->dataType = 0;
     tree->node = NULL;
     tree->lchild = NULL;
     tree->rchild = NULL;
@@ -19,7 +15,7 @@ Tree createTree(){
 
 /* 定义tmpRootTree为前一树节点, tmpTree为后一节点 */
 /* 如果后一节点的为空,则跳出 */
-void insertVar(Tree rootTree, double dData, int iData, int dataType, char *varName){
+void insertVar(Tree rootTree, char *varName, DataType dataType, double data){
     Tree tmpTree, parentTree;
     Node newNode = malloc(sizeof(struct _Node));
     tmpTree = parentTree = rootTree;
@@ -41,12 +37,12 @@ void insertVar(Tree rootTree, double dData, int iData, int dataType, char *varNa
     }else if(parentTree->node == NULL){
         parentTree->node = newNode;
     }
-    if(dataType == 0){
-        newNode->iData = iData;
-        newNode->dataType = 0;
+    if(dataType == INT){
+        newNode->data.iData = (int)data;
+        newNode->dataType = INT;
     }else{
-        newNode->dData = dData;
-        newNode->dataType = 1;
+        newNode->data.dData = data;
+        newNode->dataType = DOUBLE;
     }
     strcpy(newNode->varName, varName);
 }
