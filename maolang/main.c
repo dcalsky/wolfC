@@ -13,7 +13,6 @@ int main(){
     char *str = {"    int a, bb   , ccc;"};
     insertVar(rootTree, "ab", INT, -11);
     insertVar(rootTree, "ac", DOUBLE, 6.6);
-
     //printf("%lu", strlen(spiltStatement(removeSpace(str), ',')[1]));
     parser(rootTree, str);
     tmpNode = findNode(rootTree, "a");

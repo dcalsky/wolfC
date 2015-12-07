@@ -15,6 +15,7 @@ Tree createTree(){
 
 /* 定义tmpRootTree为前一树节点, tmpTree为后一节点 */
 /* 如果后一节点的为空,则跳出 */
+//TODO 保留关键字
 void insertVar(Tree rootTree, char *varName, DataType dataType, double data){
     Tree tmpTree, parentTree;
     Node newNode = malloc(sizeof(struct _Node));
