@@ -83,23 +83,25 @@ char* subStatement(char *statement, size_t startPosition, size_t endPosition){
 
 bool isChrInArray(char *array, char chr){
     int i = 0;
-    while(1){
-        if(array[i++] == chr){
+    for(i = 0; i < strlen(array); ++i){
+        if(array[i] == chr){
             return true;
         }
-        ++i;
     }
     return false;
 }
 
-//设置一个或者多个字符来分割字符串, 返回一个字符串数组
-char** splitStatement(char *statement, char *dividers){
+//设置一个或者多个字符来分割字符串, 返回一个字符串数组(是否包括分隔符可选)
+char** splitStatement(char *statement, char *dividers, bool include){
     size_t len = strlen(statement);
     size_t i, j = 0, startPosition = 0;
     char **strArray = malloc(sizeof(char *) * 1001);
     for(i = 0; i < len; ++i){
         if(isChrInArray(dividers, statement[i])){
             strArray[j++] = subStatement(statement, startPosition, i);
+            if(include){
+                strArray[j++] = subStatement(&statement[i], 0, 1);
+            }
             startPosition = i + 1;
         }else if(statement[i] == ';'){
             strArray[j] = subStatement(statement, startPosition, len-1);
@@ -130,31 +132,22 @@ int getOperatorLevel(char chr){
 /* 中缀转后缀 */
 void transform(Stack stack, char *statement){
     size_t len = strlen(statement);
-    size_t i;
-    for(i = 0; i < len; ++i){
-        if(isOperator(statement[i])){
-            if(getOperatorLevel(statement[i]) < getOperatorLevel(getTop(stack))){
-
-            }
-        }else if(isnumber(statement[i])){
-            if()
-        }
-    }
+    size_t i = 0;
 }
 
 
 
 void parser(Tree rootTree, char *statement){
     actionType type = getActionType(statement);
-    char *_statement, *varName;
-    char **strArrary;
+    char *_statement, **varName, **strArrary;
     Stack stack = createStack();
     Node node;
-    int i = 0;
+    varName = malloc(sizeof(char *) * 1001);
+    int i = 0, j = 0;
     switch (type){
         case INT_DECLARE:
             _statement = removeSpace(statement) + 3;
-            strArrary = splitStatement(_statement, ',');
+            strArrary = splitStatement(_statement, ",", false);
             while(strArrary[i] != NULL){
                 declareVar(rootTree, strArrary[i], INT);
                 ++i;
@@ -162,7 +155,7 @@ void parser(Tree rootTree, char *statement){
             break;
         case DOUBLE_DECLARE:
             _statement = removeSpace(statement) + 6;
-            strArrary = splitStatement(_statement, ',');
+            strArrary = splitStatement(_statement, ",", false);
             while(strArrary[i] != NULL){
                 declareVar(rootTree, strArrary[i], DOUBLE);
                 ++i;
@@ -170,8 +163,8 @@ void parser(Tree rootTree, char *statement){
             break;
         case OUTPUT:
             _statement = removeSpace(statement);
-            varName = subStatement(_statement, 6, strlen(_statement) - 1);
-            node = findNode(rootTree, varName);
+            varName[0] = subStatement(_statement, 6, strlen(_statement) - 1);
+            node = findNode(rootTree, varName[0]);
             if(node->dataType == DOUBLE){
                 printf("%.6lf", node->data.dData);
             }else{
@@ -179,10 +172,16 @@ void parser(Tree rootTree, char *statement){
             }
             break;
         case ASSIGN:;
-            strArrary = splitStatement(removeSpace(statement), '=');
-            varName = strArrary[0];
-            _statement = strArrary[1];
-            transform(stack, _statement);
+            strArrary = splitStatement(removeSpace(statement), "=", true);
+            while(strArrary[i] != NULL){
+                if(strcmp(strArrary[i+1], "=")){
+                    varName[j] = strArrary[i];
+                }else{
+                    _statement = strArrary[i+1];
+                }
+                ++i;
+            }
+            printf("%s", varName[0]);
             break;
         default:
             break;
