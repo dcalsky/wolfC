@@ -47,6 +47,16 @@ void insertVar(Tree rootTree, char *varName, DataType dataType, double data){
     strcpy(newNode->varName, varName);
 }
 
+
+Node updateNode(Node node, double val){
+    if(node->dataType == DOUBLE){
+        node->data.dData = val;
+    }else if(node->dataType == INT){
+        node->data.iData = (int) val;
+    }
+    return node;
+}
+
 Node findNode(Tree rootTree, char *varName){
     Tree tmpTree, parentTree;
     tmpTree = parentTree = rootTree;

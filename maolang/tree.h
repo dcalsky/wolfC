@@ -36,6 +36,6 @@ void insertVar(Tree,  char *, DataType, double);
 
 Node findNode(Tree, char *);
 
-
+Node updateNode(Node node, double val);
 
 #endif //MAOLANG_TREE_H
