@@ -5,14 +5,18 @@
 #include "stdio.h"
 #include "tree.h"
 #include "parser.h"
+#include "string.h"
 
 int main(){
     Tree rootTree = createTree();
     Node tmpNode;
-    char *str = {"double a = 9;"};
+    char *str = {"    double a, bb   , ccc;"};
     insertVar(rootTree, "ab", INT, -11);
     insertVar(rootTree, "ac", DOUBLE, 6.6);
-    tmpNode = findNode(rootTree, "ac");
+
+    //printf("%lu", strlen(spiltStatement(removeSpace(str), ',')[1]));
+    parser(rootTree, str);
+    tmpNode = findNode(rootTree, "bb");
 
     if(tmpNode->dataType == 1){
         printf("%.6lf\n", tmpNode->data.dData);
@@ -21,6 +25,5 @@ int main(){
     }else{
         printf("null");
     }
-    parser(str);
     return 0;
 }
