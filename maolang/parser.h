@@ -18,6 +18,6 @@ bool isStartWith(char *, char *);
 void parser(Tree, char *statement);
 char** spiltStatement(char *statement, char divider);
 char* subStatement(char *statement, size_t startPosition, size_t endPosition);
-void transform(Stack stack, char *statement);
+double transform(Tree rootTree, Stack_operator stack_operator, Stack_number stack_number, char *statement);
 
 #endif //MAOLANG_PARSER_H

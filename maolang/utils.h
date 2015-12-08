@@ -5,6 +5,8 @@
 #ifndef MAOLANG_UTILS_H
 #define MAOLANG_UTILS_H
 
+#include "stdbool.h"
+
 
 
 #endif //MAOLANG_UTILS_H

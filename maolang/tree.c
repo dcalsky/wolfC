@@ -4,7 +4,6 @@
 #include "string.h"
 #include "tree.h"
 
-
 Tree createTree(){
     Tree tree = malloc(sizeof(struct _Btree));
     tree->node = NULL;
