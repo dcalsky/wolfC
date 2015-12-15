@@ -7,12 +7,16 @@
 //
 
 #include <stdio.h>
+#include "time.h"
 
 int main(int argc, const char * argv[]) {
     int heights[100], i=0, place=-1, brother_height, length;
+    clock_t a,b;
+    double c;
     while (scanf("%d", &heights[i]) != EOF){
         ++i;
     };
+    a=clock();
     length = --i;
     brother_height = heights[i--];
     for (; i >= 0; --i) {
@@ -30,5 +34,8 @@ int main(int argc, const char * argv[]) {
             printf("%d\n", brother_height);
         }
     }
+    b=clock();
+    c=(double)b-a;
+    printf("%.2lf ms", c);
     return 0;
 }
