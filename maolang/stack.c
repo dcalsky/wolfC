@@ -5,38 +5,29 @@
 #include "stack.h"
 #include "stdlib.h"
 #include "ctype.h"
+#include "stdio.h"
 
 
-Stack_operator createStack_operator(){
-    Stack_operator stack = malloc(sizeof(struct _Stack_operator));
-    stack->next = NULL;
-    return stack;
-}
-Stack_number createStack_number(){
-    Stack_number stack = malloc(sizeof(struct _Stack_number));
+
+
+Stack createStack(){
+    Stack stack = malloc(sizeof(struct Stack));
     stack->next = NULL;
     return stack;
 }
 
 /* 向栈的开头添加一个元素 */
-void unshift_operator(Stack_operator stack, char operator){
-    Stack_operator _stack = createStack_operator();
+void unshift(Stack stack, char operator){
+    Stack _stack = createStack();
     _stack->operator = operator;
     _stack->next = stack->next;
     stack->next = _stack;
 }
 
-/* 向栈的开头添加一个元素 */
-void unshift_number(Stack_number stack, double number){
-    Stack_number _stack = createStack_number();
-    _stack->number = number;
-    _stack->next = stack->next;
-    stack->next = _stack;
-}
 
 /* 删除并返回栈的第一个元素 */
-char shift_operator(Stack_operator stack){
-    Stack_operator firstStack = stack->next;
+char shift(Stack stack){
+    Stack firstStack = stack->next;
     char result = firstStack->operator;
     stack->next = stack->next->next;
     free(firstStack);
@@ -44,22 +35,8 @@ char shift_operator(Stack_operator stack){
 }
 
 
-/* 删除并返回栈的第一个元素 */
-double shift_number(Stack_number stack){
-    Stack_number firstStack = stack->next;
-    double result = firstStack->number;
-    stack->next = stack->next->next;
-    free(firstStack);
-    return result;
-}
-
 char getTop_operator(Stack_operator stack){
     return stack->next->operator;
-}
-
-
-double getTop_number(Stack_number stack){
-    return stack->next->number;
 }
 
 
@@ -114,6 +91,7 @@ bool _isOperator(char _chr){
 
 double compute(char operator, double val1, double val2){
     if(_isOperator(operator)){
+        printf("%lf %lf\n", val1, val2);
         switch(operator){
             case '+':
                 return val1 + val2;

@@ -9,14 +9,12 @@
 #include "stdbool.h"
 #include "stdarg.h"
 
-typedef enum {DOUBLE_DECLARE, INT_DECLARE, OUTPUT, ASSIGN} actionType;
-
+typedef enum {DOUBLE_DECLARE, INT_DECLARE, OUTPUT, ASSIGN, UNRECOGNIZE} actionType;
 
 void declareVar(Tree, char *, DataType);
 char* removeSpace(char *);
 bool isStartWith(char *, char *);
 void parser(Tree, char *statement);
-char** spiltStatement(char *statement, char divider);
 char* subStatement(char *statement, size_t startPosition, size_t endPosition);
 double transform(Tree rootTree, Stack_operator stack_operator, Stack_number stack_number, char *statement);
 

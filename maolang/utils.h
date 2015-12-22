@@ -7,6 +7,7 @@
 
 #include "stdbool.h"
 
-
+typedef enum {DOUBLE, INT} ValType;
+ValType parseStringType(char *);
 
 #endif //MAOLANG_UTILS_H

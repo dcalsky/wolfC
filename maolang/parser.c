@@ -6,6 +6,7 @@
 #include "string.h"
 #include "ctype.h"
 #include "stdio.h"
+#include "exception.h"
 
 void declareVar(Tree rootTree, char *varName, DataType dataType){
     if(dataType == INT){
@@ -25,6 +26,8 @@ actionType getActionType(char *statement){
         type = ASSIGN;
     }else if(strstr(statement, "print") != NULL){
         type = OUTPUT;
+    }else{
+        type = UNRECOGNIZE;
     }
     return type;
 }
@@ -127,7 +130,8 @@ double transform(Tree rootTree, Stack_operator stack_operator, Stack_number stac
     size_t i = 0;
     Node node;
     bool hadAddnotation = false;
-    double value = 0.0;
+    char operator;
+    double value = 0.0, val1 = 0.0, val2 = 0.0;
     strArrary = splitStatement(statement, "+-*/()", true, true);
     unshift_operator(stack_operator, '#');
     while(strArrary[i] != NULL){
@@ -137,11 +141,16 @@ double transform(Tree rootTree, Stack_operator stack_operator, Stack_number stac
             hadAddnotation = true;
         }
         if(isOperator(strArrary[i])){
-            //printf("%c %c\n", getTop_operator(stack_operator), strArrary[i][0]);
             if(getIsp(getTop_operator(stack_operator)) < getOsp(strArrary[i][0])){
                 unshift_operator(stack_operator, strArrary[i++][0]);
             }else if(getIsp(getTop_operator(stack_operator)) > getOsp(strArrary[i][0])){
-                value = compute(shift_operator(stack_operator), shift_number(stack_number), shift_number(stack_number));
+                val2 = shift_number(stack_number);
+                val1 = shift_number(stack_number);
+                operator = shift_operator(stack_operator);
+                if(operator == '/' && val2 == 0){
+                    handleException(1);
+                }
+                value = compute(operator, val1, val2);
                 unshift_number(stack_number, value);
             }else{
                 shift_operator(stack_operator);
@@ -188,16 +197,19 @@ void parser(Tree rootTree, char *statement){
             }
             break;
         case OUTPUT:
-            _statement = removeSpace(statement);
-            _statement = subStatement(_statement, 6, strlen(_statement) - 1);
-            node = findNode(rootTree, splitStatement(_statement, ")", false, false)[0]);
+            _statement = removeSpace(statement) + 5;
+            node = findNode(rootTree, splitStatement(_statement, "()", false, false)[1]);
+            if(node == NULL){
+                handleException(5);
+                break;
+            }
             if(node->dataType == DOUBLE){
-                printf("%.6lf", node->data.dData);
+                printf("%.6lf\n", node->data.dData);
             }else{
-                printf("%d", node->data.iData);
+                printf("%d\n", node->data.iData);
             }
             break;
-        case ASSIGN:;
+        case ASSIGN:
             strArrary = splitStatement(removeSpace(statement), "=", true, false);
             while(strArrary[i] != NULL){
                 if(strArrary[i+1] != NULL && strcmp(strArrary[i+1], "=") == 0){
@@ -210,10 +222,17 @@ void parser(Tree rootTree, char *statement){
             i = 0;
             value = transform(rootTree, stack_operator, stack_number, _statement);
             while(varName[i] != NULL){
-                updateNode(findNode(rootTree, varName[i++]), value);
+                node = findNode(rootTree, varName[i++]);
+                if(node != NULL){
+                    updateNode(node, value);
+                }else{
+                    handleException(5);
+                    break;
+                }
             }
             break;
-        default:
+        case UNRECOGNIZE:
+            printf("unrecognizable statement.\n");
             break;
     }
 }
