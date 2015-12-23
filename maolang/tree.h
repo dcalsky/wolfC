@@ -1,9 +1,10 @@
 //
 // Created by Dcalsky on 15/12/4.
 //
-#include "stdlib.h"
+
 #ifndef MAOLANG_TREE_H
 #define MAOLANG_TREE_H
+#include "stdlib.h"
 
 typedef enum {INT, DOUBLE, ERROR} DataType;
 

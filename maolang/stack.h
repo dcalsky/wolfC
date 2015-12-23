@@ -9,19 +9,25 @@
 #define MULTIPLY_LEVEL 2
 #define DIVIDE_LEVEL 2
 
+#include "stdlib.h"
+#include "ctype.h"
+#include "stdio.h"
 #include "stdbool.h"
 
 typedef enum {INT, DOUBLE, OPERATOR} DataType;
 
 typedef struct Stack{
-    union {
-        double data1;
-        int data2;
-        char operator;
-    };
+    struct StackEle StackELe;
     DataType type;
-    struct _Stack_number *next;
+    struct Stack *next;
 } *Stack;
+
+typedef struct StackEle {
+    double dv;
+    int iv;
+    char op;
+} StackEle;
+
 
 
 

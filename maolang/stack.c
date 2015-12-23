@@ -2,13 +2,8 @@
 // Created by Dcalsky on 15/12/7.
 //
 
+#include "stdarg.h"
 #include "stack.h"
-#include "stdlib.h"
-#include "ctype.h"
-#include "stdio.h"
-
-
-
 
 Stack createStack(){
     Stack stack = malloc(sizeof(struct Stack));
@@ -17,25 +12,52 @@ Stack createStack(){
 }
 
 /* 向栈的开头添加一个元素 */
-void unshift(Stack stack, char operator){
+void unshift(Stack stack, DataType type, ...){
     Stack _stack = createStack();
-    _stack->operator = operator;
+    va_list ap;
+    va_start(ap, type);
+    switch (type) {
+        case DOUBLE:
+            _stack->dv = va_arg(ap, double);
+            _stack->type = DOUBLE;
+            break;
+        case INT:
+            _stack->iv = va_arg(ap, int);
+            _stack->type = INT;
+            break;
+        case OPERATOR:
+            _stack->dv = va_arg(ap, char);
+            _stack->type = OPERATOR;
+            break;
+    }
+    va_end(ap);
     _stack->next = stack->next;
     stack->next = _stack;
 }
 
 
 /* 删除并返回栈的第一个元素 */
-char shift(Stack stack){
+StackEle shift(Stack stack, DataType type){
     Stack firstStack = stack->next;
-    char result = firstStack->operator;
+    StackEle stackEle;
+    switch (type){
+        case DOUBLE:
+            stackEle.dv = firstStack->StackELe.dv;
+            break;
+        case INT:
+            stackEle.iv = firstStack->StackELe.iv;
+            break;
+        case OPERATOR:
+            stackEle.op = firstStack->StackELe.op;
+            break;
+    }
     stack->next = stack->next->next;
     free(firstStack);
-    return result;
+    return stackEle;
 }
 
 
-char getTop_operator(Stack_operator stack){
+char getTop(Stack stack){
     return stack->next->operator;
 }
 
