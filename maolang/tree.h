@@ -5,8 +5,8 @@
 #ifndef MAOLANG_TREE_H
 #define MAOLANG_TREE_H
 #include "stdlib.h"
-
-typedef enum {INT, DOUBLE, ERROR} DataType;
+#include "stack.h"
+#include "stdarg.h"
 
 /* Define a binary tree to store, sort, get, delete the data */
 /* find detail data based on node */
@@ -37,6 +37,6 @@ void insertVar(Tree,  char *, DataType, double);
 
 Node findNode(Tree, char *);
 
-Node updateNode(Node node, double val);
+Node updateNode(Node , ...);
 
 #endif //MAOLANG_TREE_H

@@ -20,7 +20,7 @@ void handleException(int type){
     switch (type){
         case EDBZ:
             printf("divided by ZERO");
-            exit(1); // exit program.
+            exit(-1); // exit program.
         case ELS:
             // fine~ I forgive you.
             break;
@@ -29,7 +29,8 @@ void handleException(int type){
         case EOA:
             break;
         case ENA:
-            printf("some vars is not be assigned...\n");
+/*            printf("some vars is not be assigned...\n");
+            exit(-1);*/
             break;
         default:
             break;

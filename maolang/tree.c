@@ -3,7 +3,6 @@
 //
 #include "string.h"
 #include "tree.h"
-#include "stdio.h"
 
 Tree createTree(){
     Tree tree = malloc(sizeof(struct _Btree));
@@ -49,13 +48,15 @@ void insertVar(Tree rootTree, char *varName, DataType dataType, double data){
 }
 
 
-Node updateNode(Node node, double val){
-    printf("%lf", val);
+Node updateNode(Node node, ...){
+    va_list ap;
+    va_start(ap, node);
     if(node->dataType == DOUBLE){
-        node->data.dData = val;
+        node->data.dData = va_arg(ap, double);
     }else if(node->dataType == INT){
-        node->data.iData = (int) val;
+        node->data.iData = va_arg(ap, int);
     }
+    va_end(ap);
     return node;
 }
 

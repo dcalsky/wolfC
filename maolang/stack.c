@@ -5,6 +5,8 @@
 #include "stdarg.h"
 #include "stack.h"
 
+
+/* 更新并返回StackElement */
 Stack createStack(){
     Stack stack = malloc(sizeof(struct Stack));
     stack->next = NULL;
@@ -16,49 +18,46 @@ void unshift(Stack stack, DataType type, ...){
     Stack _stack = createStack();
     va_list ap;
     va_start(ap, type);
-    switch (type) {
+    switch (type){
         case DOUBLE:
-            _stack->dv = va_arg(ap, double);
-            _stack->type = DOUBLE;
+            _stack->StackELe.dv = va_arg(ap, double);
+            _stack->StackELe.type = DOUBLE;
             break;
         case INT:
-            _stack->iv = va_arg(ap, int);
-            _stack->type = INT;
+            _stack->StackELe.iv = va_arg(ap, int);
+            _stack->StackELe.type = INT;
             break;
         case OPERATOR:
-            _stack->dv = va_arg(ap, char);
-            _stack->type = OPERATOR;
+            _stack->StackELe.op = va_arg(ap, char);
+            _stack->StackELe.type = OPERATOR;
+            break;
+        case ALPHA:
+            strcpy(_stack->StackELe.al, va_arg(ap, char*));
+            _stack->StackELe.type = ALPHA;
             break;
     }
-    va_end(ap);
     _stack->next = stack->next;
     stack->next = _stack;
+    va_end(ap);
 }
 
 
 /* 删除并返回栈的第一个元素 */
-StackEle shift(Stack stack, DataType type){
+StackEle shift(Stack stack){
     Stack firstStack = stack->next;
-    StackEle stackEle;
-    switch (type){
-        case DOUBLE:
-            stackEle.dv = firstStack->StackELe.dv;
-            break;
-        case INT:
-            stackEle.iv = firstStack->StackELe.iv;
-            break;
-        case OPERATOR:
-            stackEle.op = firstStack->StackELe.op;
-            break;
-    }
+    StackEle _e;
+    _e = firstStack->StackELe;
     stack->next = stack->next->next;
     free(firstStack);
-    return stackEle;
+    return _e;
 }
 
 
-char getTop(Stack stack){
-    return stack->next->operator;
+StackEle getTop(Stack stack){
+    Stack firstStack = stack->next;
+    StackEle _e;
+    _e = firstStack->StackELe;
+    return _e;
 }
 
 
@@ -67,19 +66,19 @@ int getOsp(char operator){
         case '#':
             return 0;
         case '(':
-            return 6;
+            return 7;
         case ')':
             return 1;
         case '*':
-            return 4;
+            return 5;
         case '/':
-            return 4;
+            return 5;
         case '+':
-            return 2;
+            return 3;
         case '-':
+            return 3;
+        case '=':
             return 2;
-        default:
-            return 0;
     }
 }
 
@@ -88,45 +87,59 @@ int getIsp(char operator){
         case '#':
             return 0;
         case '*':
-            return 5;
+            return 6;
         case '(':
             return 1;
         case '/':
-            return 5;
+            return 6;
         case '+':
-            return 3;
+            return 4;
         case '-':
-            return 3;
-        default:
-            return 0;
+            return 4;
+        case '=':
+            return 2;
     }
 }
 
-bool isOperator(char *chr){
-    char _chr = chr[0];
-    return  !isnumber(chr[1]) && (_chr == '+' || _chr == '-' || _chr == '*' || _chr == '/' || _chr == '(' || _chr == ')' || _chr == '#');
+bool isOperator(char chr, ...){
+    va_list ap;
+    va_start(ap, chr);
+    return  !isnumber(va_arg(ap, char)) && (chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')' || chr == '=' || chr == '#');
 }
 
-bool _isOperator(char _chr){
-    return  _chr == '+' || _chr == '-' || _chr == '*' || _chr == '/' || _chr == '(' || _chr == ')' || _chr == '#' ;
-}
-
-double compute(char operator, double val1, double val2){
-    if(_isOperator(operator)){
-        printf("%lf %lf\n", val1, val2);
+StackEle compute(char operator, StackEle e1, StackEle e2){
+    fflush(stdout);
+    DataType type1, type2;
+    double val = 0;
+    StackEle e;
+    type1 = e1.type;
+    type2 = e2.type;
+    if(isOperator(operator)){
         switch(operator){
             case '+':
-                return val1 + val2;
+                val = (type1 == DOUBLE ? e1.dv : e1.iv) + (type2 == DOUBLE ? e2.dv : e2.iv);
+                break;
             case '-':
-                return val1 - val2;
+                val = (type1 == DOUBLE ? e1.dv : e1.iv) - (type2 == DOUBLE ? e2.dv : e2.iv);
+                break;
             case '*':
-                return val1 * val2;
+                val = (type1 == DOUBLE ? e1.dv : e1.iv) * (type2 == DOUBLE ? e2.dv : e2.iv);
+                break;
             case '/':
-                return val1 / val2;
-            default:
-                return 0.0;
+                if((type2 == DOUBLE && e2.dv == 0) || type2 == INT && e2.iv == 0) {
+                    handleException(1);
+                }
+                val = (type1 == DOUBLE ? e1.dv : e1.iv) / (type2 == DOUBLE ? e2.dv : e2.iv);
+                break;
         }
-    }else{
-        return 0.0;
+        if(type1 == INT && type1 == type2){
+            e.type = INT;
+            e.iv = (int) val;
+            // b = a = 3 + 7 * 2
+        }else{
+            e.type = DOUBLE;
+            e.dv = val;
+        }
     }
+    return e;
 }

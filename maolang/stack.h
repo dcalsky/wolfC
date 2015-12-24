@@ -4,30 +4,36 @@
 
 #ifndef MAOLANG_STACK_H
 #define MAOLANG_STACK_H
-#define PLUS_LEVEL 1
-#define MINUS_LEVEL 1
-#define MULTIPLY_LEVEL 2
-#define DIVIDE_LEVEL 2
-
-#include "stdlib.h"
 #include "ctype.h"
 #include "stdio.h"
 #include "stdbool.h"
+#include "exception.h"
+#include "stdlib.h"
+#include "utils.h"
 
-typedef enum {INT, DOUBLE, OPERATOR} DataType;
+typedef struct StackEle {
+    union {
+        double dv;
+        int iv;
+        char op;
+        char al[101];
+    };
+    DataType type;
+} StackEle;
 
 typedef struct Stack{
     struct StackEle StackELe;
-    DataType type;
     struct Stack *next;
 } *Stack;
 
-typedef struct StackEle {
-    double dv;
-    int iv;
-    char op;
-} StackEle;
-
+int getOsp(char);
+int getIsp(char);
+StackEle getTop(Stack);
+StackEle shift(Stack);
+void unshift(Stack stack, DataType type, ...);
+Stack createStack();
+StackEle compute(char operator, StackEle e1, StackEle e2);
+bool isOperator(char, ...);
 
 
 
