@@ -3,7 +3,6 @@
 //
 
 #include "parser.h"
-#include "tree.h"
 
 typedef enum  ActionType {DOUBLE_DECLARE, INT_DECLARE, OUTPUT, ASSIGN, UNRECOGNIZE} ActionType;
 
@@ -37,7 +36,6 @@ StackEle transform(Tree rootTree, char *statement){
     size_t i = 0;
     Node node;
     Stack stack_operator, stack_number, stack_alpha;
-    bool hadAddnotation = false;
     char op;
     StackEle e, e1, e2;
     stack_alpha = createStack();
@@ -47,11 +45,6 @@ StackEle transform(Tree rootTree, char *statement){
     unshift(stack_operator, OPERATOR,'#');
     while(strArrary[i] != NULL){
         printf("chr: %s\n", strArrary[i]);
-        /*if(!hadAddnotation && strArrary[i+1] == NULL){
-            strArrary[i+1] = malloc(sizeof(char*));
-            strcpy(strArrary[i+1], "#");
-            hadAddnotation = true;
-        }*/
         if(isOperator(strArrary[i][0], strArrary[i][1])){
             if(getIsp(getTop(stack_operator).op) < getOsp(strArrary[i][0])){
                 unshift(stack_operator, OPERATOR, strArrary[i][0]);
@@ -60,6 +53,7 @@ StackEle transform(Tree rootTree, char *statement){
                 if(getTop(stack_operator).op == '='){
                     node = findNode(rootTree, shift(stack_alpha).al);
                     e = getTop(stack_number);
+                    fflush(stdout);
                     if(e.type == DOUBLE){
                         if(node->dataType == DOUBLE){
                             updateNode(node, e.dv);
@@ -86,6 +80,7 @@ StackEle transform(Tree rootTree, char *statement){
                     }
                 }
             }else{
+                //printf("%c\n", getTop(stack_operator).op);
                 shift(stack_operator);
                 ++i; //++
             }
@@ -119,7 +114,8 @@ StackEle transform(Tree rootTree, char *statement){
 void parser(Tree rootTree, char *statement){
     Node node;
     ActionType type = getActionType(statement);
-    char *_statement, **strArrary;
+    char *_statement, **strArrary, varName[201];
+    DataType dataType;
     int i = 0, j = 0;
     switch (type){
         case INT_DECLARE:
@@ -140,6 +136,15 @@ void parser(Tree rootTree, char *statement){
             break;
         case OUTPUT:
             _statement = removeSpace(statement) + 5;
+            strcpy(varName, splitStatement(_statement, "()", false, false)[1]);
+            if(isnumber(varName[0])){
+                dataType = getEleType(varName);
+                if(dataType == DOUBLE){
+                    printf("%.6lf\n", atof(varName));
+                }else{
+                    printf("%d\n", atoi(varName));
+                }
+            }
             node = findNode(rootTree, splitStatement(_statement, "()", false, false)[1]);
             if(node == NULL){
                 handleException(5);
@@ -152,42 +157,8 @@ void parser(Tree rootTree, char *statement){
             }
             break;
         case ASSIGN:
-            /*strArrary = splitStatement(removeSpace(statement), "=", true, false);*/
-/*            while(strArrary[i] != NULL){
-                if(strArrary[i+1] != NULL && strcmp(strArrary[i+1], "=") == 0){
-                    varName[j++] = strArrary[i];
-                }else if(strArrary[i+1] == NULL){
-                    _statement = strArrary[i];
-                }
-                ++i;
-            }*/
-            /* y=(d=1+1)+(d=2+2) */
-            _statement = append(removeSpace(statement), '#');
+            _statement = appendEndNotation(removeSpace(statement));
             transform(rootTree, _statement);
-/*            while(varName[i] != NULL){
-                node = findNode(rootTree, varName[i++]);
-                if(node != NULL){
-                    if(e.type == DOUBLE){
-                        if(node->dataType == DOUBLE){
-                            updateNode(node, e.dv);
-                        }else{
-                            updateNode(node, (int) e.dv);
-                        }
-                    }else{
-                        if(node->dataType == DOUBLE){
-                            updateNode(node, (double) e.iv);
-                        }else{
-                            updateNode(node, e.iv);
-                        }
-
-                    }
-                    *//*
-                    updateNode(node, e.type == DOUBLE ? e.dv : e.iv);*//*
-                }else{
-                    handleException(5);
-                    break;
-                }
-            }*/
             break;
         case UNRECOGNIZE:
             /*printf("unrecognizable statement.\n");*/

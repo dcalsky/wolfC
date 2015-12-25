@@ -52,6 +52,10 @@ StackEle shift(Stack stack){
     return _e;
 }
 
+void clearStack(Stack stack){
+    Stack _stack = createStack();
+
+}
 
 StackEle getTop(Stack stack){
     Stack firstStack = stack->next;
@@ -66,7 +70,7 @@ int getOsp(char operator){
         case '#':
             return 0;
         case '(':
-            return 7;
+            return 8;
         case ')':
             return 1;
         case '*':
@@ -78,7 +82,7 @@ int getOsp(char operator){
         case '-':
             return 3;
         case '=':
-            return 2;
+            return 7;
     }
 }
 
@@ -86,10 +90,10 @@ int getIsp(char operator){
     switch (operator){
         case '#':
             return 0;
-        case '*':
-            return 6;
         case '(':
             return 1;
+        case '*':
+            return 6;
         case '/':
             return 6;
         case '+':

@@ -17,6 +17,6 @@ bool isStartWith(char *statement, char *des);
 bool isStartWith(char *statement, char *des);
 char* removeSpace(char *statement);
 char** splitStatement(char *statement, char *dividers, bool include, bool isModeTransform);
-char* append(char *str, char chr);
+char* appendEndNotation(char *str);
 
 #endif //MAOLANG_UTILS_H

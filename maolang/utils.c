@@ -16,9 +16,13 @@ DataType getEleType(char *str){
     return type;
 }
 
-char* append(char *str, char chr){
+char* appendEndNotation(char *str){
     size_t len = strlen(str);
-    str[len] = chr;
+    if(str[len - 1] == ';'){
+        str[len - 1] = '#';
+    }else{
+        str[len] = '#';
+    }
     return str;
 }
 
