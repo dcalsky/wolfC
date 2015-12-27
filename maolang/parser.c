@@ -33,7 +33,7 @@ ActionType getActionType(char *statement){
 /* 中缀转前缀 */
 StackEle transform(Tree rootTree, char *statement){
     char **strArrary;
-    size_t i = 0;
+    size_t i = 0, j;
     Node node;
     Stack stack_operator, stack_number, stack_alpha;
     char op;
@@ -41,7 +41,7 @@ StackEle transform(Tree rootTree, char *statement){
     stack_alpha = createStack();
     stack_operator = createStack();
     stack_number = createStack();
-    bool isSign = false;
+    bool isSign = false, isAl = true;
     strArrary = splitStatement(statement, "+-*/()=#", true, true);
     unshift(stack_operator, OPERATOR,'#');
     while(strArrary[i] != NULL){
@@ -96,8 +96,16 @@ StackEle transform(Tree rootTree, char *statement){
         }else if(!isOperator(strArrary[i][0], strArrary[i][1])){
             isSign = false;
             if(isalpha(strArrary[i][0])){
-
-                if(strArrary[i+1][0] != '='){
+                j = 1;
+                while(strArrary[i+j][0] != '='){
+                    if(strArrary[i+j][0] != ')'){
+                        isAl = false;
+                        break;
+                    }
+                    ++j;
+                }
+                if(strArrary[i+1][0] == '=') isAl = true;
+                if(!isAl){
                     node = findNode(rootTree, strArrary[i]);
                     if(node->dataType == DOUBLE){
                         unshift(stack_number, DOUBLE, node->data.dData);
