@@ -46,6 +46,11 @@ void unshift(Stack stack, DataType type, ...){
 StackEle shift(Stack stack){
     Stack firstStack = stack->next;
     StackEle _e;
+    if(firstStack == NULL){
+        _e.type = DOUBLE;
+        _e.dv = 0.0;
+        return _e;
+    }
     _e = firstStack->StackELe;
     stack->next = stack->next->next;
     free(firstStack);

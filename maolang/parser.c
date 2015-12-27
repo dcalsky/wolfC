@@ -41,11 +41,20 @@ StackEle transform(Tree rootTree, char *statement){
     stack_alpha = createStack();
     stack_operator = createStack();
     stack_number = createStack();
+    bool isSign = false;
     strArrary = splitStatement(statement, "+-*/()=#", true, true);
     unshift(stack_operator, OPERATOR,'#');
     while(strArrary[i] != NULL){
-        printf("chr: %s\n", strArrary[i]);
+//        printf("chr: %s\n", strArrary[i]);
         if(isOperator(strArrary[i][0], strArrary[i][1])){
+            if(isSign && (strArrary[i][0] == '+' || strArrary[i][0] == '-')){
+                e = shift(stack_operator);
+                unshift(stack_operator, OPERATOR, strArrary[i][0]);
+                unshift(stack_operator, OPERATOR, e.op);
+                ++i;
+                continue;
+            }
+            isSign = true;
             if(getIsp(getTop(stack_operator).op) < getOsp(strArrary[i][0])){
                 unshift(stack_operator, OPERATOR, strArrary[i][0]);
                 ++i; //++
@@ -85,7 +94,9 @@ StackEle transform(Tree rootTree, char *statement){
                 ++i; //++
             }
         }else if(!isOperator(strArrary[i][0], strArrary[i][1])){
+            isSign = false;
             if(isalpha(strArrary[i][0])){
+
                 if(strArrary[i+1][0] != '='){
                     node = findNode(rootTree, strArrary[i]);
                     if(node->dataType == DOUBLE){

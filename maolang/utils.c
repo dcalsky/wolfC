@@ -26,6 +26,8 @@ char* appendEndNotation(char *str){
     return str;
 }
 
+//void appendEle(char *);
+
 bool isStartWith(char *statement, char *des){
     size_t statement_len = strlen(statement);
     size_t des_len = strlen(des);
