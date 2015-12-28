@@ -2,18 +2,17 @@
 // Created by Dcalsky on 15/12/7.
 //
 
-#include "stdarg.h"
 #include "stack.h"
 
 
-/* 更新并返回StackElement */
+/* Create a new stack and return it. */
 Stack createStack(){
     Stack stack = malloc(sizeof(struct Stack));
     stack->next = NULL;
     return stack;
 }
 
-/* 向栈的开头添加一个元素 */
+/* Add a special element to top of the stack. Nothing will be returned .*/
 void unshift(Stack stack, DataType type, ...){
     Stack _stack = createStack();
     va_list ap;
@@ -42,7 +41,7 @@ void unshift(Stack stack, DataType type, ...){
 }
 
 
-/* 删除并返回栈的第一个元素 */
+/* Delete a element of top of the stack and return it. */
 StackEle shift(Stack stack){
     Stack firstStack = stack->next;
     StackEle _e;
@@ -57,11 +56,7 @@ StackEle shift(Stack stack){
     return _e;
 }
 
-void clearStack(Stack stack){
-    Stack _stack = createStack();
-
-}
-
+/* Get the element at top of the stack. */
 StackEle getTop(Stack stack){
     Stack firstStack = stack->next;
     StackEle _e;
@@ -70,6 +65,7 @@ StackEle getTop(Stack stack){
 }
 
 
+/* Get the priority of the operator which is out of the operator's stack. */
 int getOsp(char operator){
     switch (operator){
         case '#':
@@ -91,6 +87,7 @@ int getOsp(char operator){
     }
 }
 
+/* Get the priority of the operator which is in the operator's stack. */
 int getIsp(char operator){
     switch (operator){
         case '#':
@@ -110,14 +107,15 @@ int getIsp(char operator){
     }
 }
 
+/* Judge whether the character is an operator. */
 bool isOperator(char chr, ...){
     va_list ap;
     va_start(ap, chr);
     return  !isnumber(va_arg(ap, char)) && (chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')' || chr == '=' || chr == '#');
 }
 
+/* Compute two elements according to the operator and return the result. */
 StackEle compute(char operator, StackEle e1, StackEle e2){
-    fflush(stdout);
     DataType type1, type2;
     double val = 0;
     StackEle e;

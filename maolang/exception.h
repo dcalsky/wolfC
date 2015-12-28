@@ -15,7 +15,7 @@
 #define MAOLANG_EXCEPTION_H
 #define    EDBZ       1
 #define    ELS        2
-#define    EAK        3
+#define    EAKW        3
 #define    EOA        4
 #define    ENA        5
 

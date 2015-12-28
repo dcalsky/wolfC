@@ -3,10 +3,15 @@
 //
 
 #include "parser.h"
+#include "stdio.h"
 
+/* Action type is a enum to judge which action is used while declaring. */
 typedef enum  ActionType {DOUBLE_DECLARE, INT_DECLARE, OUTPUT, ASSIGN, UNRECOGNIZE} ActionType;
 
 void declareVar(Tree rootTree, char *varName, DataType dataType){
+    if(strcmp(varName, "print")){
+        handleException(3); // "print" is a only key word in Maolang;
+    }
     if(dataType == INT){
         insertVar(rootTree, varName, INT, 0);
     }else{
@@ -14,6 +19,7 @@ void declareVar(Tree rootTree, char *varName, DataType dataType){
     }
 }
 
+/* Four actions: declare int type, declare double type, assigning and output the value of variable */
 ActionType getActionType(char *statement){
     ActionType type;
     if(isStartWith(statement, "int ")){
@@ -30,7 +36,8 @@ ActionType getActionType(char *statement){
     return type;
 }
 
-/* 中缀转前缀 */
+/* Compute a statement and output its result. */
+// TODO 代码太凌乱
 StackEle transform(Tree rootTree, char *statement){
     char **strArrary;
     size_t i = 0, j;
@@ -45,7 +52,6 @@ StackEle transform(Tree rootTree, char *statement){
     strArrary = splitStatement(statement, "+-*/()=#", true, true);
     unshift(stack_operator, OPERATOR,'#');
     while(strArrary[i] != NULL){
-//        printf("chr: %s\n", strArrary[i]);
         if(isOperator(strArrary[i][0], strArrary[i][1])){
             if(isSign && (strArrary[i][0] == '+' || strArrary[i][0] == '-')){
                 e = shift(stack_operator);
@@ -62,7 +68,6 @@ StackEle transform(Tree rootTree, char *statement){
                 if(getTop(stack_operator).op == '='){
                     node = findNode(rootTree, shift(stack_alpha).al);
                     e = getTop(stack_number);
-                    fflush(stdout);
                     if(e.type == DOUBLE){
                         if(node->dataType == DOUBLE){
                             updateNode(node, e.dv);
@@ -89,7 +94,6 @@ StackEle transform(Tree rootTree, char *statement){
                     }
                 }
             }else{
-                //printf("%c\n", getTop(stack_operator).op);
                 shift(stack_operator);
                 ++i; //++
             }
@@ -115,7 +119,7 @@ StackEle transform(Tree rootTree, char *statement){
                 }else{
                     unshift(stack_alpha, ALPHA, strArrary[i]);
                 }
-                ++i; // ++
+                ++i;
             }else{
                 if(getEleType(strArrary[i]) == INT){
                     unshift(stack_number, INT, atoi(strArrary[i++]));
@@ -130,6 +134,8 @@ StackEle transform(Tree rootTree, char *statement){
     return e;
 }
 
+
+/* parse a statement and handle it by four different actions. */
 void parser(Tree rootTree, char *statement){
     Node node;
     ActionType type = getActionType(statement);
@@ -180,7 +186,7 @@ void parser(Tree rootTree, char *statement){
             transform(rootTree, _statement);
             break;
         case UNRECOGNIZE:
-            /*printf("unrecognizable statement.\n");*/
+            // printf("unrecognizable statement.\n");  An useless output statement.
             break;
     }
 }

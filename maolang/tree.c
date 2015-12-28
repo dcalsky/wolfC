@@ -1,23 +1,21 @@
 //
 // Created by Dcalsky on 15/12/4.
 //
-#include "string.h"
 #include "tree.h"
 
+/* Create a new binary tree and return it */
 Tree createTree(){
-    Tree tree = malloc(sizeof(struct _Btree));
+    Tree tree = malloc(sizeof(struct Tree));
     tree->node = NULL;
     tree->lchild = NULL;
     tree->rchild = NULL;
     return tree;
 }
 
-/* 定义tmpRootTree为前一树节点, tmpTree为后一节点 */
-/* 如果后一节点的为空,则跳出 */
-//TODO 保留关键字
+/* Insert a variable with its name, type of data, and data into the tree. */
 void insertVar(Tree rootTree, char *varName, DataType dataType, double data){
     Tree tmpTree, parentTree;
-    Node newNode = malloc(sizeof(struct _Node));
+    Node newNode = malloc(sizeof(struct Node));
     tmpTree = parentTree = rootTree;
     Tree newTree = createTree();
     while(tmpTree != NULL){
@@ -47,7 +45,7 @@ void insertVar(Tree rootTree, char *varName, DataType dataType, double data){
     strcpy(newNode->varName, varName);
 }
 
-
+/* Update the value of the node in the tree. */
 Node updateNode(Node node, ...){
     va_list ap;
     va_start(ap, node);
@@ -60,6 +58,7 @@ Node updateNode(Node node, ...){
     return node;
 }
 
+/* Find a node according to its name in the tree. */
 Node findNode(Tree rootTree, char *varName){
     Tree tmpTree, parentTree;
     tmpTree = parentTree = rootTree;

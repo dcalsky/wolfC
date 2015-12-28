@@ -2,10 +2,9 @@
 // Created by Dcalsky on 15/12/7.
 //
 
-
 #include "utils.h"
-#include "stdio.h"
 
+/* Get a type of data of statement (It's pretty freak. */
 DataType getEleType(char *str){
      DataType type;
     if(strchr(str, '.')){
@@ -16,6 +15,7 @@ DataType getEleType(char *str){
     return type;
 }
 
+/* Append a notation into end of the statement for calculating easily :-) */
 char* appendEndNotation(char *str){
     size_t len = strlen(str);
     if(str[len - 1] == ';'){
@@ -26,8 +26,7 @@ char* appendEndNotation(char *str){
     return str;
 }
 
-//void appendEle(char *);
-
+/* Judge whether statement is start with some words. */
 bool isStartWith(char *statement, char *des){
     size_t statement_len = strlen(statement);
     size_t des_len = strlen(des);
@@ -49,7 +48,7 @@ bool isStartWith(char *statement, char *des){
     return result;
 }
 
-/* remove space in statement  Ps: strlen function do not to compute '\0' */
+/* remove spaces in the statement  Ps: strlen function do not to compute '\0' */
 char* removeSpace(char *statement){
     size_t i, j;
     size_t len = strlen(statement);
@@ -63,6 +62,8 @@ char* removeSpace(char *statement){
     return _statement;
 }
 
+
+/* Drag a segment of the statement within defined limits. */
 char* subStatement(char *statement, size_t startPosition, size_t endPosition){
     if(endPosition <= startPosition){
         return NULL;
@@ -76,6 +77,7 @@ char* subStatement(char *statement, size_t startPosition, size_t endPosition){
     return _statement;
 }
 
+/**/
 bool isChrInArray(char *array, char chr){
     int i = 0;
     for(i = 0; i < strlen(array); ++i){
@@ -86,19 +88,23 @@ bool isChrInArray(char *array, char chr){
     return false;
 }
 
-bool __isOperator(char chr){
+/* Judge whether a character is operator. (Inner function*/
+bool _isOperator(char chr){
     return chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')';
 }
 
-//设置一个或者多个字符来分割字符串, 返回一个字符串数组(是否包括分隔符可选)
 
+/* Set one or more character to split statement and return an array of string.
+ * args: include -> Whether remove operators \
+ *       isModeTransform -> Whether in the process of translation.
+ * */
 char** splitStatement(char *statement, char *dividers, bool include, bool isModeTransform){
     size_t len = strlen(statement);
     size_t i, j = 0, startPosition = 0;
     char **strArray = malloc(sizeof(char *) * 1001);
     for(i = 0; i < len; ++i){
         if(isChrInArray(dividers, statement[i])){
-            if(isModeTransform && statement[i] == '-' && __isOperator(statement[i-1]) && isnumber(statement[i+1])){
+            if(isModeTransform && statement[i] == '-' && _isOperator(statement[i-1]) && isnumber(statement[i+1])){
                 continue;
             }
             strArray[j++] = subStatement(statement, startPosition, i);
