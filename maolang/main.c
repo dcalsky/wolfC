@@ -6,19 +6,21 @@
  * Program will handle statement line by line.
  *
  * Created by Dcalsky on 15/11/30.
+ *
  * */
 
 #include "stdio.h"
 #include "tree.h"
 #include "parser.h"
 
+//Begin
 int main(int argc, char *argv[]){
-    char str[1001], pos[200] = {"/Users/Dcalsky/c/maolang/test.mao"};
     FILE *file;
-    Tree rootTree = createTree();
-    file = fopen(argv[1] ? argv[1] : pos, "r");
+    char str[1001], pos[200] = {"/Users/Dcalsky/c/maolang/test.mao"};
+    Tree rootTree = createTree(); //Create a new tree through over whole the program.
+    file = fopen(argv[1] ? argv[1] : pos, "r"); //If program can't read data from outside, it will use data of test.
     while(fgets(str, 1001, file) != NULL){
-        parser(rootTree, str);
+        parser(rootTree, str); //Enter handle of parser.
     }
     return 0;
 }

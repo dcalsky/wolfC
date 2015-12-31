@@ -20,8 +20,8 @@
 /* find detail data based on node */
 
 typedef struct Tree {
-    struct Node *node;
-    struct Tree *lchild;
+    struct Node *node;  //An point structure including some detailed data
+    struct Tree *lchild; // left children tree
     struct Tree *rchild;
 } *Tree;
 

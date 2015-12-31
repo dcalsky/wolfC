@@ -77,7 +77,7 @@ char* subStatement(char *statement, size_t startPosition, size_t endPosition){
     return _statement;
 }
 
-/**/
+/* Judge whether a character is in the array  */
 bool isChrInArray(char *array, char chr){
     int i = 0;
     for(i = 0; i < strlen(array); ++i){
@@ -93,7 +93,6 @@ bool _isOperator(char chr){
     return chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')';
 }
 
-
 /* Set one or more character to split statement and return an array of string.
  * args: include -> Whether remove operators \
  *       isModeTransform -> Whether in the process of translation.
@@ -101,7 +100,7 @@ bool _isOperator(char chr){
 char** splitStatement(char *statement, char *dividers, bool include, bool isModeTransform){
     size_t len = strlen(statement);
     size_t i, j = 0, startPosition = 0;
-    char **strArray = malloc(sizeof(char *) * 1001);
+    char **strArray = malloc(sizeof(char *) * 100);
     for(i = 0; i < len; ++i){
         if(isChrInArray(dividers, statement[i])){
             if(isModeTransform && statement[i] == '-' && _isOperator(statement[i-1]) && isnumber(statement[i+1])){
@@ -122,5 +121,3 @@ char** splitStatement(char *statement, char *dividers, bool include, bool isMode
     }
     return strArray;
 }
-
-

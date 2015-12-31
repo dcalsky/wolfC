@@ -142,7 +142,6 @@ StackEle compute(char operator, StackEle e1, StackEle e2){
         if(type1 == INT && type1 == type2){
             e.type = INT;
             e.iv = (int) val;
-            // b = a = 3 + 7 * 2
         }else{
             e.type = DOUBLE;
             e.dv = val;

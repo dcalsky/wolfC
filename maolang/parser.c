@@ -8,6 +8,7 @@
 /* Action type is a enum to judge which action is used while declaring. */
 typedef enum  ActionType {DOUBLE_DECLARE, INT_DECLARE, OUTPUT, ASSIGN, UNRECOGNIZE} ActionType;
 
+/* Insert a variable(node) into tree */
 void declareVar(Tree rootTree, char *varName, DataType dataType){
     if(strcmp(varName, "print")){
         handleException(3); // "print" is a only key word in Maolang;
@@ -37,9 +38,8 @@ ActionType getActionType(char *statement){
 }
 
 /* Compute a statement and output its result. */
-// TODO 代码太凌乱
 StackEle transform(Tree rootTree, char *statement){
-    char **strArrary;
+    char **strArray;
     size_t i = 0, j;
     Node node;
     Stack stack_operator, stack_number, stack_alpha;
@@ -49,23 +49,28 @@ StackEle transform(Tree rootTree, char *statement){
     stack_operator = createStack();
     stack_number = createStack();
     bool isSign = false, isAl = true;
-    strArrary = splitStatement(statement, "+-*/()=#", true, true);
+    strArray = splitStatement(statement, "+-*/()=#", true, true);
     unshift(stack_operator, OPERATOR,'#');
-    while(strArrary[i] != NULL){
-        if(isOperator(strArrary[i][0], strArrary[i][1])){
-            if(isSign && (strArrary[i][0] == '+' || strArrary[i][0] == '-')){
+    while(strArray[i] != NULL){
+        if(isOperator(strArray[i][0], strArray[i][1])){
+            // Judge whether the number has the sign which is a computed result of other numbers
+            if(isSign && (strArray[i][0] == '+' || strArray[i][0] == '-')){
                 e = shift(stack_operator);
-                unshift(stack_operator, OPERATOR, strArrary[i][0]);
+                unshift(stack_operator, OPERATOR, strArray[i][0]);
                 unshift(stack_operator, OPERATOR, e.op);
                 ++i;
                 continue;
             }
+            //isSign = true then change positions of two operators at top of stack.
             isSign = true;
-            if(getIsp(getTop(stack_operator).op) < getOsp(strArrary[i][0])){
-                unshift(stack_operator, OPERATOR, strArrary[i][0]);
+            //If the priority of operator at top of stack is less than the handling operator, then adding this operator into stack_operator.
+            if(getIsp(getTop(stack_operator).op) < getOsp(strArray[i][0])){
+                unshift(stack_operator, OPERATOR, strArray[i][0]);
                 ++i; //++
-            }else if(getIsp(getTop(stack_operator).op) > getOsp(strArrary[i][0])){
+            }else if(getIsp(getTop(stack_operator).op) > getOsp(strArray[i][0])){
+                //If the priority of operator at top of stack is greater than the handling operator, then computing two numbers.
                 if(getTop(stack_operator).op == '='){
+                    //If operator is '=', meaning it's an assign handle.
                     node = findNode(rootTree, shift(stack_alpha).al);
                     e = getTop(stack_number);
                     if(e.type == DOUBLE){
@@ -83,6 +88,7 @@ StackEle transform(Tree rootTree, char *statement){
                     }
                     shift(stack_operator);
                 }else{
+                    //If not, compute two numbers
                     e2 = shift(stack_number);
                     e1 = shift(stack_number);
                     op = shift(stack_operator).op;
@@ -97,39 +103,43 @@ StackEle transform(Tree rootTree, char *statement){
                 shift(stack_operator);
                 ++i; //++
             }
-        }else if(!isOperator(strArrary[i][0], strArrary[i][1])){
+        }else if(!isOperator(strArray[i][0], strArray[i][1])){
             isSign = false;
-            if(isalpha(strArrary[i][0])){
+            //Well, there are some letter between brackets are waiting for being assigned. Because of pretty ugly, I hate them.
+            if(isalpha(strArray[i][0])){
                 j = 1;
-                while(strArrary[i+j][0] != '='){
-                    if(strArrary[i+j][0] != ')'){
+                while(strArray[i+j][0] != '='){
+                    if(strArray[i+j][0] != ')'){
                         isAl = false;
                         break;
                     }
                     ++j;
                 }
-                if(strArrary[i+1][0] == '=') isAl = true;
+                if(strArray[i+1][0] == '=') isAl = true;
                 if(!isAl){
-                    node = findNode(rootTree, strArrary[i]);
+                    //If isAl is false, my program will think this letter will take part in process of computing.
+                    node = findNode(rootTree, strArray[i]);
                     if(node->dataType == DOUBLE){
                         unshift(stack_number, DOUBLE, node->data.dData);
                     }else{
                         unshift(stack_number, INT, node->data.iData);
                     }
                 }else{
-                    unshift(stack_alpha, ALPHA, strArrary[i]);
+                    //If isAl is true, my program will take this letter into top of stack_alpha(store some letters will be assigned).
+                    unshift(stack_alpha, ALPHA, strArray[i]);
                 }
                 ++i;
             }else{
-                if(getEleType(strArrary[i]) == INT){
-                    unshift(stack_number, INT, atoi(strArrary[i++]));
+                if(getEleType(strArray[i]) == INT){
+                    unshift(stack_number, INT, atoi(strArray[i++]));
                 }else{
-                    unshift(stack_number, DOUBLE, atof(strArrary[i++]));
+                    unshift(stack_number, DOUBLE, atof(strArray[i++]));
                 }
             }
 
         }
     }
+    //That's all, we get an element including data;
     e = getTop(stack_number);
     return e;
 }
@@ -139,27 +149,30 @@ StackEle transform(Tree rootTree, char *statement){
 void parser(Tree rootTree, char *statement){
     Node node;
     ActionType type = getActionType(statement);
-    char *_statement, **strArrary, varName[201];
+    char *_statement, **strArray, varName[201];
     DataType dataType;
     int i = 0, j = 0;
     switch (type){
         case INT_DECLARE:
+            //Pattern: int a,b,ccc;
             _statement = removeSpace(statement) + 3;
-            strArrary = splitStatement(_statement, ",", false, false);
-            while(strArrary[i] != NULL){
-                declareVar(rootTree, strArrary[i], INT);
+            strArray = splitStatement(_statement, ",", false, false);
+            while(strArray[i] != NULL){
+                declareVar(rootTree, strArray[i], INT);
                 ++i;
             }
             break;
         case DOUBLE_DECLARE:
+            //Pattern: double a,b,ccc;
             _statement = removeSpace(statement) + 6;
-            strArrary = splitStatement(_statement, ",", false, false);
-            while(strArrary[i] != NULL){
-                declareVar(rootTree, strArrary[i], DOUBLE);
+            strArray = splitStatement(_statement, ",", false, false);
+            while(strArray[i] != NULL){
+                declareVar(rootTree, strArray[i], DOUBLE);
                 ++i;
             }
             break;
         case OUTPUT:
+            //Pattern: print(variableName);
             _statement = removeSpace(statement) + 5;
             strcpy(varName, splitStatement(_statement, "()", false, false)[1]);
             if(isnumber(varName[0])){
@@ -182,11 +195,13 @@ void parser(Tree rootTree, char *statement){
             }
             break;
         case ASSIGN:
+            //Pattern: a = c+1;
             _statement = appendEndNotation(removeSpace(statement));
             transform(rootTree, _statement);
             break;
         case UNRECOGNIZE:
-            // printf("unrecognizable statement.\n");  An useless output statement.
+            // poor robustness :-(
+            // printf("unrecognizable statement.\n");
             break;
     }
 }
