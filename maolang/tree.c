@@ -1,6 +1,15 @@
-//
-// Created by Dcalsky on 15/12/4.
-//
+/*
+ * Binary tree
+ * Because of reasons of time and ability, some functions are not achieved.
+ * Including two important structures: Tree and Node. Node is a segment of Tree, which is used to store the data.
+ *
+ * How to judge the type of variable? It's a vital problem confuse me that I try to achieve generics, but I failed. So I \
+ * add a extra type to record the type of a variable. That's "dataType" which is the structure including four type (You can \
+ * see detailed content in utils.h). Ok, I know it's a bad idea to solve this problem.
+ *
+ * Created by Dcalsky on 15/12/4.
+ * */
+
 #include "tree.h"
 
 /* Create a new binary tree and return it */

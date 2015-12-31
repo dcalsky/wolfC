@@ -1,9 +1,19 @@
-//
-// Created by Dcalsky on 15/12/7.
-//
+/*
+ * Maolang's Stack component
+ *
+ * First of all, I wanna say: every data will be packed in the structure named StackEle while transferring.
+ * Why I choose this way to transfer data? Because I find it's difficult to achieve common type to store the data, and it will \
+ * produce some mistake in computing value of double and int type.
+ * Admitting it's a ugly way to pack many types of data whichever name of variable or member of structure. But I try my best \
+ * to solve this problem, fortunately, I made it.
+ *
+ * By the way, it often use two stacks(stack_number and stack_operator) in the process of calculation.
+ *
+ * Created by Dcalsky on 15/12/7.
+ *
+ * */
 
 #include "stack.h"
-
 
 /* Create a new stack and return it. */
 Stack createStack(){

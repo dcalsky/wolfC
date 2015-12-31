@@ -7,6 +7,7 @@
  * Although it's embarrassed, some functions to handle exception have already designed for Maolang.
  * Created by Dcalsky on 15/12/5.
 */
+
 #ifndef MAOLANG_PARSER_H
 #define MAOLANG_PARSER_H
 

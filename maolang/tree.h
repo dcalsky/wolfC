@@ -22,18 +22,18 @@
 typedef struct Tree {
     struct Node *node;  //An point structure including some detailed data
     struct Tree *lchild; // left children tree
-    struct Tree *rchild;
+    struct Tree *rchild; // right children tree
 } *Tree;
 
 
 /* It's a structure to store data of double and int types. */
 typedef struct Node {
     char varName[24];
-    union {
+    union {             // Anonymous union
         int iData;
         double dData;
     } data;
-    DataType dataType;
+    DataType dataType;  // type of data (Declared in utils.h)
 } *Node;
 
 /* Create a new binary tree and return it */

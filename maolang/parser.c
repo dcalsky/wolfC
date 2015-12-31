@@ -1,6 +1,12 @@
-//
-// Created by Dcalsky on 15/12/5.
-//
+/*
+ * Maolang's Parser component
+ *
+ * It's important component is designed to parse the statement. And it will handle three actions: declare variable, output \
+ * the value of the variable and assign data to the variable.
+ *
+ * Although it's embarrassed, some functions to handle exception have already designed for Maolang.
+ * Created by Dcalsky on 15/12/5.
+*/
 
 #include "parser.h"
 #include "stdio.h"
@@ -69,6 +75,7 @@ StackEle transform(Tree rootTree, char *statement){
                 ++i; //++
             }else if(getIsp(getTop(stack_operator).op) > getOsp(strArray[i][0])){
                 //If the priority of operator at top of stack is greater than the handling operator, then computing two numbers.
+                //Ps. variable I keep original value.(Only here)
                 if(getTop(stack_operator).op == '='){
                     //If operator is '=', meaning it's an assign handle.
                     node = findNode(rootTree, shift(stack_alpha).al);
@@ -79,7 +86,7 @@ StackEle transform(Tree rootTree, char *statement){
                         }else{
                             updateNode(node, (int) e.dv);
                         }
-                    }else{
+                    }else{ // e.type == INT
                         if(node->dataType == DOUBLE){
                             updateNode(node, (double) e.iv);
                         }else{
@@ -155,7 +162,7 @@ void parser(Tree rootTree, char *statement){
     switch (type){
         case INT_DECLARE:
             //Pattern: int a,b,ccc;
-            _statement = removeSpace(statement) + 3;
+            _statement = removeSpace(statement) + 3; //Ignore "int"
             strArray = splitStatement(_statement, ",", false, false);
             while(strArray[i] != NULL){
                 declareVar(rootTree, strArray[i], INT);
@@ -164,7 +171,7 @@ void parser(Tree rootTree, char *statement){
             break;
         case DOUBLE_DECLARE:
             //Pattern: double a,b,ccc;
-            _statement = removeSpace(statement) + 6;
+            _statement = removeSpace(statement) + 6; //Ignore "double"
             strArray = splitStatement(_statement, ",", false, false);
             while(strArray[i] != NULL){
                 declareVar(rootTree, strArray[i], DOUBLE);
@@ -173,12 +180,12 @@ void parser(Tree rootTree, char *statement){
             break;
         case OUTPUT:
             //Pattern: print(variableName);
-            _statement = removeSpace(statement) + 5;
+            _statement = removeSpace(statement) + 5; //Ignore "print"
             strcpy(varName, splitStatement(_statement, "()", false, false)[1]);
             if(isnumber(varName[0])){
                 dataType = getEleType(varName);
                 if(dataType == DOUBLE){
-                    printf("%.6lf\n", atof(varName));
+                    printf("%.6lf\n", atof(varName)); // Calculate to six decimal places
                 }else{
                     printf("%d\n", atoi(varName));
                 }
@@ -189,15 +196,15 @@ void parser(Tree rootTree, char *statement){
                 break;
             }
             if(node->dataType == DOUBLE){
-                printf("%.6lf\n", node->data.dData);
+                printf("%.6lf\n", node->data.dData); // Calculate to six decimal places
             }else{
                 printf("%d\n", node->data.iData);
             }
             break;
         case ASSIGN:
             //Pattern: a = c+1;
-            _statement = appendEndNotation(removeSpace(statement));
-            transform(rootTree, _statement);
+            _statement = appendEndNotation(removeSpace(statement)); //Add '#' at end of statement.
+            transform(rootTree, _statement); // handle every statements !
             break;
         case UNRECOGNIZE:
             // poor robustness :-(

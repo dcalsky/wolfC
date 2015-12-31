@@ -10,6 +10,7 @@
  * By the way, it often use two stacks(stack_number and stack_operator) in the process of calculation.
  *
  * Created by Dcalsky on 15/12/7.
+ *
  * */
 
 #ifndef MAOLANG_STACK_H
