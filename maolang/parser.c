@@ -45,16 +45,16 @@ ActionType getActionType(char *statement){
 
 /* Compute a statement and output its result. */
 StackEle transform(Tree rootTree, char *statement){
-    char **strArray;
-    size_t i = 0, j;
     Node node;
+    char **strArray, op;
+    bool isSign = false, isAl = true;
+    size_t i = 0, j;
     Stack stack_operator, stack_number, stack_alpha;
-    char op;
     StackEle e, e1, e2;
+
     stack_alpha = createStack();
     stack_operator = createStack();
     stack_number = createStack();
-    bool isSign = false, isAl = true;
     strArray = splitStatement(statement, "+-*/()=#", true, true);
     unshift(stack_operator, OPERATOR,'#');
     while(strArray[i] != NULL){
@@ -74,6 +74,7 @@ StackEle transform(Tree rootTree, char *statement){
                 unshift(stack_operator, OPERATOR, strArray[i][0]);
                 ++i; //++
             }else if(getIsp(getTop(stack_operator).op) > getOsp(strArray[i][0])){
+                isSign = false;
                 //If the priority of operator at top of stack is greater than the handling operator, then computing two numbers.
                 //Ps. variable I keep original value.(Only here)
                 if(getTop(stack_operator).op == '='){
@@ -95,6 +96,7 @@ StackEle transform(Tree rootTree, char *statement){
                     }
                     shift(stack_operator);
                 }else{
+                    isSign = false;
                     //If not, compute two numbers
                     e2 = shift(stack_number);
                     e1 = shift(stack_number);

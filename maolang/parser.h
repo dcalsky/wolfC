@@ -10,7 +10,6 @@
 
 #ifndef MAOLANG_PARSER_H
 #define MAOLANG_PARSER_H
-
 #include "tree.h"
 #include "stack.h"
 #include "stdbool.h"
