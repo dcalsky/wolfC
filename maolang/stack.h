@@ -59,9 +59,6 @@ Stack createStack();
 /* Compute two elements according to the operator and return the result(StackEle). */
 StackEle compute(char operator, StackEle e1, StackEle e2);
 
-/* Judge whether the character is an operator. */
-bool isOperator(char, ...);
-
 
 
 #endif //MAOLANG_STACK_H

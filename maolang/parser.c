@@ -47,7 +47,7 @@ ActionType getActionType(char *statement){
 StackEle transform(Tree rootTree, char *statement){
     Node node;
     char **strArray, op;
-    bool isSign = false, isAl = true;
+    bool isAl = true, isSign = false;
     size_t i = 0, j;
     Stack stack_operator, stack_number, stack_alpha;
     StackEle e, e1, e2;
@@ -56,25 +56,28 @@ StackEle transform(Tree rootTree, char *statement){
     stack_operator = createStack();
     stack_number = createStack();
     strArray = splitStatement(statement, "+-*/()=#", true, true);
-    unshift(stack_operator, OPERATOR,'#');
+    unshift(stack_operator, OPERATOR, '#');
     while(strArray[i] != NULL){
         if(isOperator(strArray[i][0], strArray[i][1])){
             // Judge whether the number has the sign which is a computed result of other numbers
-            if(isSign && (strArray[i][0] == '+' || strArray[i][0] == '-')){
-                e = shift(stack_operator);
-                unshift(stack_operator, OPERATOR, strArray[i][0]);
-                unshift(stack_operator, OPERATOR, e.op);
-                ++i;
-                continue;
+            if(i != 0 && isOperator(strArray[i-1][0], strArray[i-1][1]) && strArray[i-1][0] != ')' && (strArray[i][0] == '+' || strArray[i][0] == '-')){
+                if(strArray[i][0] == '-'){
+                    if(strArray[i-1][0] != '+'){
+                        isSign = true;
+                        ++i;
+                        continue;
+                    }
+                }else{
+                    ++i;
+                    continue;
+                }
             }
             //isSign = true then change positions of two operators at top of stack.
-            isSign = true;
             //If the priority of operator at top of stack is less than the handling operator, then adding this operator into stack_operator.
             if(getIsp(getTop(stack_operator).op) < getOsp(strArray[i][0])){
                 unshift(stack_operator, OPERATOR, strArray[i][0]);
                 ++i; //++
             }else if(getIsp(getTop(stack_operator).op) > getOsp(strArray[i][0])){
-                isSign = false;
                 //If the priority of operator at top of stack is greater than the handling operator, then computing two numbers.
                 //Ps. variable I keep original value.(Only here)
                 if(getTop(stack_operator).op == '='){
@@ -96,7 +99,6 @@ StackEle transform(Tree rootTree, char *statement){
                     }
                     shift(stack_operator);
                 }else{
-                    isSign = false;
                     //If not, compute two numbers
                     e2 = shift(stack_number);
                     e1 = shift(stack_number);
@@ -110,10 +112,18 @@ StackEle transform(Tree rootTree, char *statement){
                 }
             }else{
                 shift(stack_operator);
-                ++i; //++
+                if(isSign){
+                    e = shift(stack_number);
+                    if(e.type == DOUBLE){
+                        unshift(stack_number, DOUBLE, -e.dv);
+                    }else{
+                        unshift(stack_number, INT, -e.iv);
+                    }
+                }
+                ++i;
+                isSign = false;
             }
         }else if(!isOperator(strArray[i][0], strArray[i][1])){
-            isSign = false;
             //Well, there are some letter between brackets are waiting for being assigned. Because of pretty ugly, I hate them.
             if(isalpha(strArray[i][0])){
                 j = 1;
@@ -214,3 +224,4 @@ void parser(Tree rootTree, char *statement){
             break;
     }
 }
+

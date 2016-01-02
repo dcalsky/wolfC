@@ -13,6 +13,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "ctype.h"
+#include "stdarg.h"
 
 /* An important structure of date type in Maolang. Including four types: double, int, operator, letter */
 typedef enum DataType {DOUBLE, INT, OPERATOR, ALPHA} DataType;
@@ -35,5 +36,8 @@ char** splitStatement(char *statement, char *dividers, bool include, bool isMode
 
 /* Append a notation into end of the statement for calculating easily :-) */
 char* appendEndNotation(char *str);
+
+/* Judge whether the character is an operator. */
+bool isOperator(char chr, ...);
 
 #endif //MAOLANG_UTILS_H

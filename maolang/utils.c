@@ -88,10 +88,13 @@ bool isChrInArray(char *array, char chr){
     return false;
 }
 
-/* Judge whether a character is operator. (Inner function*/
-bool _isOperator(char chr){
-    return chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')';
+/* Judge whether the character is an operator. */
+bool isOperator(char chr, ...){
+    va_list ap;
+    va_start(ap, chr);
+    return  !isnumber(va_arg(ap, char)) && (chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')' || chr == '=' || chr == '#');
 }
+
 
 /* Set one or more character to split statement and return an array of string.
  * args: include -> Whether remove operators \
@@ -103,7 +106,7 @@ char** splitStatement(char *statement, char *dividers, bool include, bool isMode
     char **strArray = malloc(sizeof(char *) * 100);
     for(i = 0; i < len; ++i){
         if(isChrInArray(dividers, statement[i])){
-            if(isModeTransform && statement[i] == '-' && _isOperator(statement[i-1]) && isnumber(statement[i+1])){
+            if(isModeTransform && statement[i] == '-' && isOperator(statement[i-1]) && isnumber(statement[i+1])){
                 continue;
             }
             strArray[j++] = subStatement(statement, startPosition, i);

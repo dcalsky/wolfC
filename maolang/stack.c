@@ -117,12 +117,6 @@ int getIsp(char operator){
     }
 }
 
-/* Judge whether the character is an operator. */
-bool isOperator(char chr, ...){
-    va_list ap;
-    va_start(ap, chr);
-    return  !isnumber(va_arg(ap, char)) && (chr == '+' || chr == '-' || chr == '*' || chr == '/' || chr == '(' || chr == ')' || chr == '=' || chr == '#');
-}
 
 /* Compute two elements according to the operator and return the result. */
 StackEle compute(char operator, StackEle e1, StackEle e2){

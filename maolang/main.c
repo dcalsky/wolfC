@@ -22,5 +22,6 @@ int main(int argc, char *argv[]){
     while(fgets(str, 1001, file) != NULL){
         parser(rootTree, str); //Enter handle of parser.
     }
+    fclose(file);
     return 0;
 }

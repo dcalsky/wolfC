@@ -19,7 +19,7 @@ void handleException(int type){
     switch (type){
         case EDBZ:
             printf("divided by ZERO");
-            exit(-1); // exit program.
+            exit(1); // exit program.
         case ELS:
             break;
         case EAKW:
