@@ -10,6 +10,8 @@
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    printf("Hello, World!\n");
+    int a;
+    a = 5.0/(12/13);
+    printf("%d\n", a);
     return 0;
 }
